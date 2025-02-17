@@ -1,19 +1,29 @@
 extends base
 
-mixin tableElement(rank, name, level)
-  tr
-    td= rank
-    td= name
-    td= level
-
-block content 
-  h1 leaderboard
-  table(class="striped responsive-table centered leaderboard")
-    thead
-      tr
-        th Rank
-        th Name
-        th Level
-    tbody
-      each user, index in users
-        +tableElement(`${index + 1}`, user.username, user.level)
+block content
+  .leaderboard-container
+    .leaderboard-box
+      h1.leaderboard-title Cryptic Hunt Leaderboard
+      .leaderboard-wrapper
+        table.leaderboard-table
+          thead
+            tr
+              th.rank-header Position
+              th.name-header Player Name
+              th.level-header Current Level
+          tbody#leaderboardBody
+            each user, index in users
+              tr(class=user._id === currentUser ? 'current-user' : '')
+                td.rank-cell
+                  if index < 3
+                    span(class=`trophy trophy-${index + 1}`)
+                      case index
+                        when 0
+                          | 🥇
+                        when 1
+                          | 🥈
+                        when 2
+                          | 🥉
+                  span.rank #{index + 1}
+                td.name-cell= user.name || user.username
+                td.level-cell Level #{user.level}

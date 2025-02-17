@@ -18,6 +18,16 @@ exports.isLoggedIn = (req, res, next) => {
 	next();
 };
 
+exports.isLoggedInUser = (req, res) => {
+	if (req.isAuthenticated()) {
+		return res.json({ isLoggedIn: true });
+	}
+
+	return res.json({
+		isLoggedIn: false,
+	});
+};
+
 // 4. Auth middleware for user roles
 exports.restrictTo = (...roles) => {
 	return catchAsync(async (req, res, next) => {

@@ -1,8 +1,10 @@
 extends base
 
-block content 
-  h1 Welcome to cypher.
-  if user    
-    a(class="waves-effect waves-light btn home-cta" href="/play") Play
-  else
-    a(class="waves-effect waves-light btn home-cta" href="/login") Login
+block content
+  .auth-container
+    .auth-box
+      h1.auth-title Welcome to Cryptic Hunt
+      if user
+        a.auth-button(href="/play") Play Now
+      else
+        a.auth-button(href="/login") Login to Play
