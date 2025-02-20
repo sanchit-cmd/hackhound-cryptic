@@ -3,34 +3,34 @@ const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 
 exports.createQuestion = catchAsync(async (req, res, next) => {
-  // Create question data object
-  const questionData = {
-    problem: req.body.problem,
-    answer: req.body.answer.toLowerCase(),
-    hint: req.body.hint,
-    level: req.body.level
-  };
+	// Create question data object
+	const questionData = {
+		problem: req.body.problem,
+		answer: req.body.answer.toLowerCase(),
+		hint: req.body.hint,
+		level: req.body.level,
+	};
 
-  // Add image if uploaded
-  if (req.file) {
-    questionData.image = req.file.path;
-  }
+	// Add image if uploaded
+	if (req.file) {
+		questionData.image = req.file.path;
+	}
 
-  // Create question
-  const question = await Question.create(questionData);
+	// Create question
+	const question = await Question.create(questionData);
 
-  // Send response
-  res.status(201).json({
-    status: 'success',
-    data: {
-      question: {
-        level: question.level,
-        problem: question.problem,
-        hint: question.hint,
-        image: question.image
-      }
-    }
-  });
+	// Send response
+	res.status(201).json({
+		status: 'success',
+		data: {
+			question: {
+				level: question.level,
+				problem: question.problem,
+				hint: question.hint,
+				image: question.image,
+			},
+		},
+	});
 });
 
 exports.updateQuestion = catchAsync(async (req, res, next) => {
