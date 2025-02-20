@@ -1,22 +1,57 @@
 extends base
 
 block content
-  h1 New Question
-  .login-form
-    form
-      label.login-form__username Problem Statement
-      input#statement(type='text' name='problem' placeholder='State the question' required)
+  .admin-container
+    .admin-box
+      h1.admin-title Add New Question
+      form#questionForm.admin-form(enctype="multipart/form-data")
+        .form-group
+          label.form-label(for="statement") Problem Statement
+          textarea#statement.admin-input(
+            name='problem'
+            placeholder='Enter the question'
+            rows='4'
+          )
 
-      label.login-form__username Answer 
-      input#answer(type='text' name='answer' placeholder='All Lowercase' required)
+        .form-group
+          label.form-label(for="answer") Answer
+          input#answer.admin-input(
+            type='text'
+            name='answer'
+            placeholder='Answer (lowercase)'
+            required
+          )
 
-      label.login-form__username Hint
-      input#hint(type='text' name='hint' placeholder='Help the contestants out' required)
+        .form-group
+          label.form-label(for="hint") Hint
+          input#hint.admin-input(
+            type='text'
+            name='hint'
+            placeholder='Provide a hint for players'
+            required
+          )
 
-      label.login-form__username Level Number
-      input#level(type='text' name='level' placeholder='Problem level number' required)
+        .form-group
+          label.form-label(for="level") Level Number
+          input#level.admin-input(
+            type='number'
+            name='level'
+            placeholder='Enter level number'
+            min="0"
+            required
+          )
 
-      button(class="btn waves-effect waves-light" type="submit" name="action") Submit
+        .form-group
+          label.form-label(for="image") Question Image
+          .file-input-wrapper
+            input#image.file-input(
+              type='file'
+              name='image'
+              accept='image/*'
+            )
+            span.file-input-text Choose an image...
 
-block append scripts
-  script(src="/js/newQuestion.js")
+        button.admin-button(type="submit")
+          span.button-text
+            i.fas.fa-plus
+            | Add Question

@@ -1,32 +1,36 @@
 const Question = require('../models/questionModel');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
-const { cloudinary } = require('../config/cloudinary');
 
 exports.createQuestion = catchAsync(async (req, res, next) => {
-	if (!req.body.problem && !req.file) {
-		return next(
-			new AppError('A question must have either text or image', 400)
-		);
-	}
+  // Create question data object
+  const questionData = {
+    problem: req.body.problem,
+    answer: req.body.answer.toLowerCase(),
+    hint: req.body.hint,
+    level: req.body.level
+  };
 
-	const questionData = { ...req.body };
+  // Add image if uploaded
+  if (req.file) {
+    questionData.image = req.file.path;
+  }
 
-	if (req.file) {
-		questionData.image = req.file.path;
-		if (!req.body.problem) {
-			questionData.imageOnly = true;
-		}
-	}
+  // Create question
+  const question = await Question.create(questionData);
 
-	const question = await Question.create(questionData);
-
-	res.status(200).json({
-		status: 'success',
-		data: {
-			question,
-		},
-	});
+  // Send response
+  res.status(201).json({
+    status: 'success',
+    data: {
+      question: {
+        level: question.level,
+        problem: question.problem,
+        hint: question.hint,
+        image: question.image
+      }
+    }
+  });
 });
 
 exports.updateQuestion = catchAsync(async (req, res, next) => {
