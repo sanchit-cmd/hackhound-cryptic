@@ -17,6 +17,7 @@ const viewRouter = require("./routes/viewRouter");
 const AppError = require("./utils/appError");
 
 const errHandler = require("./utils/errorHandler");
+const { globalLimiter, gameLimiter, authLimiter } = require("./config/rateLimit");
 
 const app = express();
 app.set("view engine", "pug");
@@ -36,7 +37,25 @@ mongoose
     console.log(err);
   });
 
-app.use(helmet());
+// Apply rate limiters
+app.use(globalLimiter); // Global rate limiting
+app.use('/api/v1/play', gameLimiter); // Stricter limits for game submissions
+app.use('/api/v1/users/auth', authLimiter); // Limit auth attempts
+
+// Security middlewares
+app.set('trust proxy', 1); // Trust first proxy - important for rate limiting behind Ngrok
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'", "'unsafe-inline'"],
+      styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
+      imgSrc: ["'self'", "data:", "https://res.cloudinary.com"],
+      fontSrc: ["'self'", "https://fonts.gstatic.com"],
+      connectSrc: ["'self'"],
+    },
+  },
+}));
 app.use(xss());
 
 app.use(express.json());
