@@ -16,17 +16,12 @@ const viewRouter = require("./routes/viewRouter");
 
 const AppError = require("./utils/appError");
 
-<<<<<<< HEAD
 const errHandler = require('./utils/errorHandler');
 const {
 	globalLimiter,
 	gameLimiter,
 	authLimiter,
 } = require('./config/rateLimit');
-=======
-const errHandler = require("./utils/errorHandler");
-const { globalLimiter, gameLimiter, authLimiter } = require("./config/rateLimit");
->>>>>>> d536b5283fc453328a3e33147a697fa18c3140f7
 
 const app = express();
 app.set("view engine", "pug");
@@ -59,7 +54,6 @@ app.use('/api/v1/users/auth', authLimiter); // Limit auth attempts
 
 // Security middlewares
 app.set('trust proxy', 1); // Trust first proxy - important for rate limiting behind Ngrok
-<<<<<<< HEAD
 app.use(
 	helmet({
 		contentSecurityPolicy: {
@@ -78,20 +72,6 @@ app.use(
 		},
 	})
 );
-=======
-app.use(helmet({
-  contentSecurityPolicy: {
-    directives: {
-      defaultSrc: ["'self'"],
-      scriptSrc: ["'self'", "'unsafe-inline'"],
-      styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
-      imgSrc: ["'self'", "data:", "https://res.cloudinary.com"],
-      fontSrc: ["'self'", "https://fonts.gstatic.com"],
-      connectSrc: ["'self'"],
-    },
-  },
-}));
->>>>>>> d536b5283fc453328a3e33147a697fa18c3140f7
 app.use(xss());
 
 app.use(express.json());
